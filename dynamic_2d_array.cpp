@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "structures.h"
 
@@ -12,12 +13,12 @@ void arrayInit(dynamic_2d_array* arr) {
 
 void insertItem(dynamic_2d_array* arr, char* item, size_t item_size) {
     if (arr->size == arr->capacity) {
-        // The array is full, so we need to allocate more memory
+        
         arr->capacity *= 2;
         arr->array = (char**)realloc(arr->array, arr->capacity * sizeof(char*));
     }
 
-    // Allocate memory for the new item and copy it into the array
+    
     arr->array[arr->size] = (char*)calloc(item_size, sizeof(char));
     memcpy(arr->array[arr->size], item, item_size * sizeof(char));
     arr->size++;
@@ -25,7 +26,7 @@ void insertItem(dynamic_2d_array* arr, char* item, size_t item_size) {
 
 char* getItem(dynamic_2d_array* arr, int index) {
     if (index < 0 || index >= arr->size) {
-        // Invalid index
+    
         return NULL;
     }
     return arr->array[index];
@@ -33,25 +34,51 @@ char* getItem(dynamic_2d_array* arr, int index) {
 
 void updateItem(dynamic_2d_array* arr, int index, char* item, size_t item_size) {
     if (index < 0 || index >= arr->size) {
-        // Invalid index
+        
         return;
     }
 
-    // Reallocate memory for the item and copy the new item into the array
     arr->array[index] = (char*)realloc(arr->array[index], item_size * sizeof(char));
     memcpy(arr->array[index], item, item_size * sizeof(char));
 }
 
-void deleteItem(dynamic_2d_array* arr, int index) {
-    if (index < 0 || index >= arr->size) {
-        // Invalid index
+void insertItemAtIndex(dynamic_2d_array* arr, int row_index, int col_index, dynamic_array* item) {
+    if (row_index < 0 || row_index > arr->size) {
+        printf("Index out of bounds\n");
         return;
     }
 
-    // Free the memory of the item to be deleted
+    if (arr->size == arr->capacity) {
+        arr->capacity *= 2;
+        dynamic_array** temp = (dynamic_array**)realloc(arr->array, arr->capacity * sizeof(dynamic_array*));
+        if (temp == NULL) {
+            printf("Error reallocating memory\n");
+            return;
+        }
+        arr->array = (char**)temp;
+    }
+
+    for (int i = arr->size; i > row_index; i--) {
+        arr->array[i] = arr->array[i - 1];
+    }
+
+    insertItemAtIndex(item, col_index, item->size);
+    arr->array[row_index] = (char*)item;
+    arr->size++;
+}
+
+
+
+
+
+
+void deleteItem(dynamic_2d_array* arr, int index) {
+    if (index < 0 || index >= arr->size) {
+        return;
+    }
+
     free(arr->array[index]);
 
-    // Shift the remaining items down
     for (size_t i = index; i < arr->size - 1; i++) {
         arr->array[i] = arr->array[i + 1];
     }
@@ -59,7 +86,6 @@ void deleteItem(dynamic_2d_array* arr, int index) {
 }
 
 void freeArray(dynamic_2d_array* arr) {
-    // Free the memory of each item
     for (size_t i = 0; i < arr->size; i++) {
         free(arr->array[i]);
     }

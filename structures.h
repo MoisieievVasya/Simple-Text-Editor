@@ -1,7 +1,7 @@
 #ifndef DYMANIC_2D_ARRAY_H
 #define DYNAMIC_2D_ARRAY_H
 
-#define INITIAL_SIZE 8 
+#define INITIAL_SIZE 64 
 
 typedef struct {
     size_t size;
@@ -13,6 +13,7 @@ void arrayInit(dynamic_2d_array* arr);
 void insertItem(dynamic_2d_array* arr, char* item, size_t item_size);
 char* getItem(dynamic_2d_array* arr, int index);
 void updateItem(dynamic_2d_array* arr, int index, char* item, size_t item_size);
+void insertItemAtIndex(dynamic_2d_array* arr, int row_index, int col_index, dynamic_array* item);
 void deleteItem(dynamic_2d_array* arr, int index);
 void freeArray(dynamic_2d_array* arr);
 
@@ -22,7 +23,7 @@ void freeArray(dynamic_2d_array* arr);
 #ifndef DYNAMIC_ARRAY_H
 #define DYNAMIC_ARRAY_H
 
-#define INITIAL_SIZE 8 
+#define INITIAL_SIZE 64 
 
 typedef struct {
 	size_t size;
@@ -35,6 +36,7 @@ void arrayInit(dynamic_array** arr_ptr);
 void freeArray(dynamic_array* container);
 void insertItem(dynamic_array* container, int item);
 void updateItem(dynamic_array* container, int i, int item);
+void insertItemAtIndex(dynamic_array* arr, int index, char item);
 char getItem(dynamic_array* container, int i);
 void deleteItem(dynamic_array* container, int item);
 void printArray(dynamic_array* container);
