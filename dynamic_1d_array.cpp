@@ -22,20 +22,30 @@ void arrayInit(dynamic_array** arr_ptr)
 	*arr_ptr = container;
 }
 
-void insertItem(dynamic_array* container, char item)
-{
-	if (container->size == container->capacity) {
-		char* temp = container->array;
-		container->capacity <<= 1;
-		container->array = (char*)realloc(container->array, container->capacity * sizeof(char));
-		if (!container->array) {
-			printf("Out of Memory\n");
-			container->array = temp;
+void insertItem(dynamic_array* arr, char* items, size_t len) {
+	if (arr == nullptr) {
+		printf("Array is null\n");
+		return;
+	}
+	if (arr->size + len > arr->capacity) {
+		while (arr->size + len > arr->capacity) {
+			arr->capacity *= 2;
+		}
+		char* temp = (char*)realloc(arr->array, arr->capacity * sizeof(char));
+		if (temp == NULL) {
+			printf("Error reallocating memory\n");
 			return;
 		}
+		arr->array = temp;
 	}
-	container->array[container->size++] = item;
+
+	memcpy(arr->array + arr->size, items, len);
+	arr->size += len;
 }
+
+
+
+
 
 
 char getItem(dynamic_array* container, int index)
@@ -64,20 +74,22 @@ void insertItemAtIndex(dynamic_array* arr, int index, char item) {
 
 	if (arr->size == arr->capacity) {
 		arr->capacity *= 2;
-		arr->array = (char*)realloc(arr->array, arr->capacity * sizeof(char));
-		if (arr->array == NULL) {
+		char* temp = (char*)realloc(arr->array, arr->capacity * sizeof(char));
+		if (temp == NULL) {
 			printf("Error reallocating memory\n");
 			return;
 		}
+		arr->array = temp;
 	}
 
-	for (int i = arr->size; i > index; i--) {
+	for (int i = arr->size; i > index; --i) {
 		arr->array[i] = arr->array[i - 1];
 	}
 
 	arr->array[index] = item;
 	arr->size++;
 }
+
 
 
 void deleteItem(dynamic_array* container, int index)
@@ -95,15 +107,29 @@ void deleteItem(dynamic_array* container, int index)
 
 void printArray(dynamic_array* container)
 {
-	printf("Stored text: ");
-	for (int i = 0; i < container->size; i++) {
-		printf("%d ", container->array[i]);
-	}
+    if (container == NULL) {
+        return;
+    }
+
+    
+    for (int i = 0; i < container->size; i++) {
+        if (container->array[i] != NULL) {
+            printf("%c", container->array[i]);
+        }
+    }
+	printf("\n");
 }
+
 
 void freeArray(dynamic_array* container)
 {
+	if (container == NULL) {
+		printf("Container is already NULL\n");
+		return;
+	}
+
 	free(container->array);
 	free(container);
-	container ->array = NULL;
+	container = NULL;
 }
+

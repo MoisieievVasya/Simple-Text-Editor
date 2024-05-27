@@ -30,12 +30,18 @@
     <ClCompile Include="dynamic_1d_array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="donut.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editorf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="structures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="donut.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

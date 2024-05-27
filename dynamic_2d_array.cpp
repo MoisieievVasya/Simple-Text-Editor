@@ -8,39 +8,55 @@
 void arrayInit(dynamic_2d_array* arr) {
     arr->size = 0;
     arr->capacity = INITIAL_SIZE;
-    arr->array = (char**)calloc(arr->capacity, sizeof(char*));
+    arr->array = (dynamic_array**)calloc(arr->capacity, sizeof(char*));
 }
 
-void insertItem(dynamic_2d_array* arr, char* item, size_t item_size) {
+void insertItem(dynamic_2d_array* arr, dynamic_array* item) {
     if (arr->size == arr->capacity) {
-        
         arr->capacity *= 2;
-        arr->array = (char**)realloc(arr->array, arr->capacity * sizeof(char*));
+        dynamic_array** temp = (dynamic_array**)realloc(arr->array, arr->capacity * sizeof(dynamic_array*));
+        if (temp == NULL) {
+            printf("Error reallocating memory\n");
+            return;
+        }
+        arr->array = temp;
     }
 
-    
-    arr->array[arr->size] = (char*)calloc(item_size, sizeof(char));
-    memcpy(arr->array[arr->size], item, item_size * sizeof(char));
+    arr->array[arr->size] = item;
     arr->size++;
 }
 
-char* getItem(dynamic_2d_array* arr, int index) {
+
+
+dynamic_array* getItem(dynamic_2d_array* arr, int index) {
     if (index < 0 || index >= arr->size) {
-    
         return NULL;
     }
     return arr->array[index];
 }
 
+
 void updateItem(dynamic_2d_array* arr, int index, char* item, size_t item_size) {
     if (index < 0 || index >= arr->size) {
-        
         return;
     }
 
-    arr->array[index] = (char*)realloc(arr->array[index], item_size * sizeof(char));
-    memcpy(arr->array[index], item, item_size * sizeof(char));
+    dynamic_array* temp = (dynamic_array*)realloc(arr->array[index], item_size * sizeof(char));
+    if (temp == NULL) {
+        printf("Error reallocating memory\n");
+        return;
+    }
+    arr->array[index] = temp;
+
+    if (arr->array[index] != NULL) {
+        memcpy(arr->array[index], item, item_size * sizeof(char));
+    }
+    else {
+        printf("Error: arr->array[index] is NULL\n");
+    }
 }
+
+
 
 void insertItemAtIndex(dynamic_2d_array* arr, int row_index, int col_index, dynamic_array* item) {
     if (row_index < 0 || row_index > arr->size) {
@@ -55,7 +71,7 @@ void insertItemAtIndex(dynamic_2d_array* arr, int row_index, int col_index, dyna
             printf("Error reallocating memory\n");
             return;
         }
-        arr->array = (char**)temp;
+        arr->array = (dynamic_array**)temp;
     }
 
     for (int i = arr->size; i > row_index; i--) {
@@ -63,7 +79,7 @@ void insertItemAtIndex(dynamic_2d_array* arr, int row_index, int col_index, dyna
     }
 
     insertItemAtIndex(item, col_index, item->size);
-    arr->array[row_index] = (char*)item;
+    arr->array[row_index] = (dynamic_array*)item;
     arr->size++;
 }
 

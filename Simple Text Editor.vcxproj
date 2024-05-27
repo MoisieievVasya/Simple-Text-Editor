@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="donut.cpp" />
     <ClCompile Include="dynamic_1d_array.cpp" />
     <ClCompile Include="dynamic_2d_array.cpp" />
     <ClCompile Include="helper.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="text_operetions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="donut.h" />
     <ClInclude Include="editorf.h" />
     <ClInclude Include="structures.h" />
   </ItemGroup>
