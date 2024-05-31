@@ -12,8 +12,8 @@ void append_text(dynamic_array* arr, char* text) {
 
 
 void start_new_line(dynamic_array* arr) {
-	char item[1] = {'\n',};
-	insertItem(arr, item, sizeof('\n'));
+	char item = '\n';
+	insertItem(arr, &item, sizeof('\n'));
 }
 
 
@@ -36,10 +36,10 @@ int file_load(dynamic_2d_array* loaded_file, char* file_name) {
 
 			insertItemAtIndex(line_arr, line_arr->size, '\0');
 
-			insertItem(loaded_file, line_arr); 
+			insertItem(loaded_file, line_arr);
 
 			loaded_file->size++;
-			
+
 		}
 		printf("File loaded successfully\n");
 		fclose(file);
@@ -58,15 +58,19 @@ int file_save(dynamic_2d_array* arr, int rows, char* file_name) {
 	}
 	else {
 		for (int i = 0; i < rows; i++) {
-			if (arr->array != NULL) {
-				fprintf(file, "%s\n", arr->array[i]);
+			if (arr == NULL || arr->array[i] == NULL) {
+				continue;
 			}
+			if (arr->array[i]->array != NULL) {
+				fprintf(file, "%s", arr->array[i]->array);
+			}
+			fprintf(file, "\n");
 		}
+		printf("File saved successfully\n");
 		fclose(file);
 	}
 	return 0;
 }
-
 
 void searchSubstring(dynamic_2d_array* arr, char* substring) {
 	for (int i = 0; i < arr->size; i++) {
@@ -79,9 +83,10 @@ void searchSubstring(dynamic_2d_array* arr, char* substring) {
 		str[line->size] = '\0';
 
 		char* found = strstr(str, substring);
-		if (found != NULL) {
+		while (found != NULL) {
 			int indexInRow = found - str;
 			printf("Substring '%s' found in line %d at index %d\n", substring, i, indexInRow);
+			found = strstr(found + strlen(substring), substring);
 		}
 
 		free(str);

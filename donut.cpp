@@ -76,7 +76,7 @@ void render_frame(float A, float B) {
                     int luminance_index = L * 8;
                     // luminance_index is now in the range 0..11 (8*sqrt(2) = 11.3)
                     // now we lookup the character corresponding to the
-                    // luminance and plot it in our output:
+                    // luminance and plot it in our output: 
                     output[pos] =
                         ".,-~:;=!*#$@"[luminance_index > 0 ? luminance_index : 0];
                 }

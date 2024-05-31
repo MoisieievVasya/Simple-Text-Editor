@@ -24,7 +24,7 @@ int main() {
 
 	while (true) {
 		printf("Enter your command: \n");
-			scanf_s("%d", &command);
+		scanf_s("%d", &command);
 		getchar();
 
 		switch (command) {
@@ -48,8 +48,10 @@ int main() {
 			if (data != NULL) {
 				freeArray(data);
 			}
-			data = (dynamic_2d_array*)malloc(sizeof(dynamic_2d_array));
-			arrayInit(data);
+			if (data == NULL) {
+				data = (dynamic_2d_array*)malloc(sizeof(dynamic_2d_array));
+				arrayInit(data);
+			}
 
 			file_name = new char[256];
 			printf("Enter the name of the file: \n");
@@ -58,27 +60,30 @@ int main() {
 			file_load(data, file_name);
 			break;
 		case 4:
+
+			file_name_to_save = new char[256];
+			printf("Enter the name of the file: \n");
+			scanf_s("%s", file_name_to_save, 256);
+
 			if (buffer == NULL) {
 				printf("No data to save\n");
 				break;
 			}
 
-			file_name_to_save = new char[256];
-			printf("Enter the name of the file: \n");
-			scanf_s("%s", file_name_to_save, 256);
-			if (data != NULL) {
-				for (int i = 0; i < data->size; i++) {
-					file_save(data, static_cast<int>(data->array[i]->size), file_name_to_save);
-				}
-			}
 			if (buffer != NULL) {
 				if (data == NULL) {
 					data = (dynamic_2d_array*)malloc(sizeof(dynamic_2d_array));
 					arrayInit(data);
 				}
 				insertItem(data, buffer);
-				file_save(data,(buffer->size), file_name_to_save);
-			} 
+			}
+			
+			if (data != NULL) {
+				for (int i = 0; i < data->size; i++) {
+					file_save(data, static_cast<int>(data->array[i]->size), file_name_to_save);
+				}
+			}
+			
 			break;
 		case 5:
 			if (data == NULL && buffer == NULL) {
