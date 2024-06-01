@@ -106,7 +106,7 @@ int main() {
 				for (int i = 0; i < data->size; i++) {
 					printArray((dynamic_array*)data->array[i]);
 				}
-				printArray(buffer);
+			printArray(buffer);
 				break;
 			}
 		case 6:
@@ -136,6 +136,10 @@ int main() {
 			
 		}
 		case 7:
+			if (buffer->size == 0) {
+				printf("No data to search\n");
+				break;
+			}
 			if (data == NULL && buffer == NULL) {
 				printf("No data to search\n");
 				break;
